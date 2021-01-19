@@ -1,6 +1,8 @@
 #include "guide.h"
 #include "hiredis/hiredis.h"
 
-StepCode GetNextStep(const CarState &car_state) {
-    return StepCode::STOP;
+Guide::Guide(int, int, int, const std::string &, const std::string &, const std::string &, const std::string &) {}
+
+Guide::StepCode Guide::GetNextStep(const CarState &) {
+  return Guide::StepCode::STOP;
 }
