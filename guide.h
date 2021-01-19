@@ -3,8 +3,7 @@
 
 #include <string>
 
-class Guide {
-public:
+struct Guide {
   struct Position {
     int row_idx;
     int col_idx;
@@ -25,9 +24,6 @@ public:
     RESET,
     ERROR,
   };
-  Guide(int, int, int, const std::string &, const std::string &, const std::string &, const std::string &);
-  StepCode GetNextStep(const CarState &);
-private:
   int car_num;
   int row_num;
   int col_num;
@@ -35,6 +31,7 @@ private:
   std::string commit_sha;
   std::string recover_sha;
   std::string locator_recover_sha;
+  StepCode GetNextStep(const CarState &);
 };
 
 #endif
