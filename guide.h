@@ -10,13 +10,13 @@ struct Guide {
   };
   struct CarState {
     int car_id;
-    int nonce;
+    int seq;
     Position cur_pos;
     Position last_pos;
     Position dst_pos;
   };
   enum StepCode {
-    STOP,
+    STOP = 0,
     LEFT,
     RIGHT,
     FORWARD,
@@ -30,7 +30,8 @@ struct Guide {
   std::string get_lock_sha;
   std::string commit_sha;
   std::string recover_sha;
-  std::string locator_recover_sha;
+  std::string redis_host;
+  int redis_port;
   StepCode GetNextStep(const CarState &);
 };
 
