@@ -43,6 +43,6 @@ if(name_5~="")then
     redis.call('HSETNX', 'owner_map', name_5,car_id)
 end
 
-return redis.call('HGETALL owner_map')
+return redis.call('HGETALL','owner_map')
 
 

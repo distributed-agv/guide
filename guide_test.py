@@ -1,8 +1,15 @@
 import guidepy
-
+import redis
 
 if __name__ == '__main__':
-    guide = guidepy.make_guide(2, 5, 5, "127.0.0.1", 6379, "", "", "")
+    commit_script = open('commit.lua', 'r').read()
+    recover_script = open('recover.lua', 'r').read()
+    getlock_script = open('getLock.lua', 'r').read()
+    r = redis.Redis("127.0.0.1", 6379)
+    commit_script_sha = r.script_load(commit_script)
+    recover_script_sha = r.script_load(recover_script)
+    getlock_script_sha = r.script_load(getlock_script)
+    guide = guidepy.make_guide(2, 5, 5, "127.0.0.1", 6379, getlock_script_sha, commit_script_sha, recover_script_sha)
     while True:
         line = raw_input()
         tokens = line.split()
