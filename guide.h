@@ -10,7 +10,7 @@ struct Guide {
   };
   struct CarState {
     int car_id;
-    int nonce;
+    int seq;
     Position cur_pos;
     Position last_pos;
     Position dst_pos;
@@ -27,10 +27,11 @@ struct Guide {
   int car_num;
   int row_num;
   int col_num;
+  int redis_port;
+  std::string redis_host;
   std::string get_lock_sha;
   std::string commit_sha;
   std::string recover_sha;
-  std::string locator_recover_sha;
   StepCode GetNextStep(const CarState &);
 };
 
