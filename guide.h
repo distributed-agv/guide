@@ -21,6 +21,7 @@ enum StepCode {
     FORWARD,
     BACKWARD,
     RESET,
+    ERROR,
 };
 
 StepCode GetNextStep(const CarState &);
