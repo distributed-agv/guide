@@ -27,11 +27,11 @@ struct Guide {
   int car_num;
   int row_num;
   int col_num;
+  int redis_port;
+  std::string redis_host;
   std::string get_lock_sha;
   std::string commit_sha;
   std::string recover_sha;
-  std::string redis_host;
-  int redis_port;
   StepCode GetNextStep(const CarState &);
 };
 
