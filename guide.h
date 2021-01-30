@@ -18,7 +18,7 @@ struct Guide {
     Position last_pos;
     Position dst_pos;
   };
-  enum StepCode {
+  enum StepCode:int {
     STOP = 0,
     LEFT,
     RIGHT,
