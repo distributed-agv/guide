@@ -36,7 +36,7 @@ if(releasing_2~="")then
     redis.call('HDEL', 'owner_map', releasing_2)
 end
 if(releasing_3~="")then
-        redis.call('HDEL', 'owner_map', releasing_3)
+    redis.call('HDEL', 'owner_map', releasing_3)
 end
 if(releasing_4~="")then
     redis.call('HDEL', 'owner_map', releasing_4)
