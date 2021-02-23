@@ -51,6 +51,7 @@ string* Guide::findReleaseLock(int x,int y,int nextX,int nextY,int car){
     release_lock[num]=name;
     num++;
   }
+  
   return release_lock;
 }
 
@@ -235,20 +236,23 @@ Guide::StepCode Guide::GetNextStep(const CarState &car_state) {
   Guide::StepCode step_code=changeNextToDirect(cur_pos.row_idx,cur_pos.col_idx,nextX,nextY);
    
   //放锁
+  int status;
   pid_t pid = fork();
-  if (pid == 0){
-      return step_code;
-  }
-  wait(nullptr);
   
-  while(true){
-    string* release_lock=findReleaseLock(cur_pos.row_idx,cur_pos.col_idx,nextX,nextY,car_id);
-    step_code=(Guide::StepCode)releaseLock(release_lock,(int)step_code,seq,car_id,redis_context);
-    if(step_code==6){
-      continue;
+  if (pid == 0){
+     while(true){
+      string* release_lock=findReleaseLock(cur_pos.row_idx,cur_pos.col_idx,nextX,nextY,car_id);
+      step_code=(Guide::StepCode)releaseLock(release_lock,(int)step_code,seq,car_id,redis_context);
+      if(step_code==6){
+        continue;
+      }
+      redisFree(redis_context);
+      break;
     }
-    redisFree(redis_context);
-    exit(1);
+    exit(0);
+  }
+  else{
+    return step_code;
   }
 }
 
