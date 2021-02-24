@@ -169,6 +169,7 @@ Guide::StepCode Guide::GetNextStep(const CarState &car_state) {
  
  
   redisContext *redis_context = redisConnect(redis_host.c_str(), redis_port);
+
   if (NULL == redis_context || redis_context->err){
 
       Guide::StepCode step_code = ERROR;
@@ -187,8 +188,10 @@ Guide::StepCode Guide::GetNextStep(const CarState &car_state) {
       pid_t pid = fork();
       if (pid == 0){
         execlp("python3", "python3", "recover_lua.py");
+        exit(0);
       }
       Guide::StepCode step_code = ERROR;
+      freeReplyObject(lua_exit);
       redisFree(redis_context);
       return step_code;
     }
@@ -224,6 +227,26 @@ Guide::StepCode Guide::GetNextStep(const CarState &car_state) {
   }
 
   int getlock_result=getLock(cur_pos.row_idx,cur_pos.col_idx,car_id,seq,redis_context);
+  if(getlock_result == 6){
+    redisReply *lua_exit=(redisReply *)redisCommand(redis_context,"SCRIPT %s %s" ,"EXISTS",recover_sha.c_str());
+    if (NULL == lua_exit){
+      Guide::StepCode step_code = ERROR;
+      redisFree(redis_context);
+      return step_code;
+    }
+    if(lua_exit->element[0]->integer==0){
+      pid_t pid = fork();
+      if (pid == 0){
+        execlp("python2", "python2", "recover_lua.py");
+        exit(0);
+      }
+      Guide::StepCode step_code = ERROR;
+      freeReplyObject(lua_exit);
+      redisFree(redis_context);
+      return step_code;
+    }
+    freeReplyObject(lua_exit);
+  }
   if(getlock_result != 1){
     redisFree(redis_context);
     
